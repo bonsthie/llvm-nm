@@ -4,6 +4,6 @@
 #include <string>
 
 namespace nm {
-	void readBytecode(const std::string &path);
+	void BytecodeReader(const std::string &path);
 }
 #endif // NM_BYTECODE_READER_H

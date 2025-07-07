@@ -10,16 +10,16 @@ file(WRITE ${NM_TARGET_DEF_FILE}
 
 foreach(fmt IN LISTS NM_TARGET)
   if (fmt STREQUAL "ELF")
-    file(GLOB ELF_SRCS  "${CMAKE_CURRENT_SOURCE_DIR}/ELF*.cpp")
+    file(GLOB ELF_SRCS  "${CMAKE_CURRENT_SOURCE_DIR}/elf*.cpp")
     list(APPEND BYTECODE_READER_SOURCES ${ELF_SRCS})
     file(APPEND ${NM_TARGET_DEF_FILE}
-      "NM_TARGET(elf, elf::BytecodeReader)\n"
+      "NM_TARGET(elf)\n"
     )
   elseif (fmt STREQUAL "LLVM")
-    file(GLOB LLVM_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/LLVM*.cpp")
+    file(GLOB LLVM_SRCS "${CMAKE_CURRENT_SOURCE_DIR}/llvm*.cpp")
     list(APPEND BYTECODE_READER_SOURCES ${LLVM_SRCS})
     file(APPEND ${NM_TARGET_DEF_FILE}
-      "NM_TARGET(llvm, llvm::BytecodeReader)\n"
+      "NM_TARGET(llvm)\n"
     )
   else()
     message(FATAL_ERROR "Unknown NM_TARGET format: '${fmt}'")

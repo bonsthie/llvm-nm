@@ -1,9 +1,9 @@
 
 #include <iostream>
 
-namespace nm::ELF {
+namespace nm::elf {
 
-void readBytecode(const std::string &path) {
+void BytecodeReader(const std::string &path) {
   std::cout << "Reading ELF bytecode from " << path << std::endl;
 }
 
