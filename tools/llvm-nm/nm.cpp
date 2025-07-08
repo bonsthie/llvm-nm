@@ -1,8 +1,27 @@
 #include "llvm-nm/BytecodeReader.h"
+#include "llvm-nm/MemoryBuffer.h"
+#include <iostream>
+#include <ostream>
+#include <stdexcept>
 
-int main(int argc, char** argv) {
-	if (argc != 2)
-		return 1;
-    nm::BytecodeReader(argv[1]);
-    return 0;
-}
+int main(int argc, char **argv) {
+  if (argc != 2)
+    return 1;
+
+  try {
+    nm::MemoryBuffer buffer(argv[1]);
+
+    auto reader = nm::getBytecodeReader(buffer);
+    if (reader) {
+      std::cout << "file format : " << reader->formatName() << std::endl;
+    } else {
+      std::cout << "invalid file format" << std::endl;
+    }
+  } catch (std::runtime_error &e) {
+    std::cout << e.what() << std::endl;
+    return 1;
+  }
+
+  return 0;
+
+} // namespace nm
