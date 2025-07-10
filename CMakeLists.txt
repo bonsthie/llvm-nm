@@ -11,7 +11,7 @@ add_subdirectory(lib)
 add_subdirectory(tools)
 # add_subdirectory(unittests)
 
-set(NM_TARGET "ELF;LLVM" CACHE STRING "Semicolon-separated list of formats to support")
+set(NM_TARGET "LLVM" CACHE STRING "Semicolon-separated list of formats to support")
 
 set(CMAKE_EXPERIMENTAL_CXX_MODULE_DYNDEP 1)
 
