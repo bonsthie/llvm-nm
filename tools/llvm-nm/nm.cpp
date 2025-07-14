@@ -1,4 +1,3 @@
-#include "llvm-nm/BytecodeReader.h"
 #include "llvm-nm/MemoryBuffer.h"
 #include <iostream>
 #include <ostream>
@@ -13,12 +12,6 @@ int main(int argc, char **argv) {
   try {
     MemoryBuffer buffer(argv[1]);
 
-    auto reader = getBytecodeReader(buffer);
-    if (reader) {
-      std::cout << "file format : " << reader->formatName() << std::endl;
-    } else {
-      std::cout << "invalid file format" << std::endl;
-    }
   } catch (std::runtime_error &e) {
     std::cout << e.what() << std::endl;
     return 1;
