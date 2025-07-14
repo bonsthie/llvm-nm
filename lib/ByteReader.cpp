@@ -2,7 +2,7 @@
 #include <cassert>
 #include <cstdint>
 #include <cstring>
-#include <llvm-nm/ByteReader.h>
+#include <llvm/ByteReader.h>
 
 namespace nm {
 

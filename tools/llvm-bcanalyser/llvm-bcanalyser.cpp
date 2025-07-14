@@ -1,5 +1,5 @@
-#include "llvm-nm/BytecodeReader.h"
-#include "llvm-nm/MemoryBuffer.h"
+#include "llvm/BytecodeReader.h"
+#include "llvm/MemoryBuffer.h"
 #include <iostream>
 #include <ostream>
 #include <stdexcept>

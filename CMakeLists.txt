@@ -9,7 +9,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 
 add_subdirectory(lib)
 add_subdirectory(tools)
-# add_subdirectory(unittests)
+add_subdirectory(unittests)
 
 set(NM_TARGET "LLVM" CACHE STRING "Semicolon-separated list of formats to support")
 

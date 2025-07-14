@@ -1,4 +1,4 @@
-#include "llvm-nm/MemoryBuffer.h"
+#include "llvm/MemoryBuffer.h"
 #include <iostream>
 #include <ostream>
 #include <stdexcept>
