@@ -2,7 +2,7 @@ add_executable(llvm-nm nm.cpp)
 
 target_link_libraries(llvm-nm
 	PRIVATE
-		BytecodeReader
+		ByteReader
 )
 
 target_include_directories(llvm-nm

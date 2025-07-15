@@ -2,7 +2,7 @@ add_executable(llvm-bcanalyser llvm-bcanalyser.cpp)
 
 target_link_libraries(llvm-nm
 	PRIVATE
-		BytecodeReader
+		ByteReader
 )
 
 target_include_directories(llvm-nm

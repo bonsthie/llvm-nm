@@ -30,17 +30,17 @@ file(APPEND ${NM_TARGET_DEF_FILE}
   "#undef NM_TARGET"
 )
 
-add_library(BytecodeReader STATIC)
+add_library(ByteReader STATIC)
 
-target_sources(BytecodeReader
+target_sources(ByteReader
   PRIVATE
     ${BYTECODE_READER_SOURCES}
 )
 
-target_include_directories(BytecodeReader
+target_include_directories(ByteReader
   PUBLIC
     ${CMAKE_SOURCE_DIR}/include
     ${CMAKE_BINARY_DIR}   # so the .def file is findable
 )
 
-target_compile_features(BytecodeReader PUBLIC cxx_std_23)
+target_compile_features(ByteReader PUBLIC cxx_std_23)

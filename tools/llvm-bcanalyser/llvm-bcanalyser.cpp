@@ -1,4 +1,4 @@
-#include "llvm/BytecodeReader.h"
+#include "llvm/ByteReader.h"
 #include "llvm/MemoryBuffer.h"
 #include <iostream>
 #include <ostream>
@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
   try {
     MemoryBuffer buffer(argv[1]);
 
-    auto reader = getBytecodeReader(buffer);
+    auto reader = getByteReader(buffer);
     if (reader) {
       std::cout << "file format : " << reader->formatName() << std::endl;
     } else {
