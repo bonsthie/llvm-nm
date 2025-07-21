@@ -3,7 +3,7 @@
 #include <ostream>
 #include <stdexcept>
 
-using namespace nm;
+using namespace llvm;
 
 int main(int argc, char **argv) {
   if (argc != 2)
@@ -19,4 +19,4 @@ int main(int argc, char **argv) {
 
   return 0;
 
-} // namespace nm
+} // namespace llvm

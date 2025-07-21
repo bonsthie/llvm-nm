@@ -3,9 +3,14 @@
 #include <gtest/gtest.h>
 #include <vector>
 
-using namespace nm;
+using namespace llvm;
 
-// ——— Basic (non‑fixture) tests ———
+/*
+ *
+ * basic function
+ *
+*/
+
 TEST(ByteReaderBasicTest, ReadByteCorrectly) {
     uint8_t    data[] = {0x12, 0x34, 0x56};
     ByteReader reader(data, sizeof(data));
@@ -54,19 +59,22 @@ TEST(ByteReaderBasicTest, IsOverflowBitsCorrect) {
     EXPECT_EQ(reader.bitsRemaining(), 0);
 }
 
+/*
+ *
+ * bites reader test LSB MSB
+ *
+*/
 
 class ByteReaderTest : public ::testing::Test {
-protected:
-    void SetUp() override {
-        data_ = { 0b11110000, 0b10101100, 0b11110000 };
-    }
+  protected:
+    void SetUp() override { data_ = {0b11110000, 0b10101100, 0b11110000}; }
 
     std::vector<uint8_t> data_;
 };
 
 TEST_F(ByteReaderTest, ReadBitsLSB_NibbleByNibble) {
     ByteReader reader(data_.data(), data_.size());
-    uint64_t result = 0;
+    uint64_t   result = 0;
 
     // First nibble LSB-first → 0b0000
     EXPECT_EQ(reader.readBitsLSB(4, result), 4u);
@@ -79,7 +87,7 @@ TEST_F(ByteReaderTest, ReadBitsLSB_NibbleByNibble) {
 
 TEST_F(ByteReaderTest, ReadBitsMSB_NibbleByNibble) {
     ByteReader reader(data_.data(), data_.size());
-    uint64_t result = 0;
+    uint64_t   result = 0;
 
     // First nibble MSB-first → 0b1111
     EXPECT_EQ(reader.readBitsMSB(4, result), 4u);
@@ -92,18 +100,62 @@ TEST_F(ByteReaderTest, ReadBitsMSB_NibbleByNibble) {
 
 TEST_F(ByteReaderTest, ReadBitsLSB_ACrossByteBoundary) {
     ByteReader reader(data_.data(), data_.size());
-    uint64_t result = 0;
+    uint64_t   result = 0;
 
     // Read 12 bits LSB-first: low 8 bits of byte0 then low 4 of byte1
     EXPECT_EQ(reader.readBitsLSB(12, result), 12u);
-	EXPECT_EQ(result, 0xCF0ULL);
+    EXPECT_EQ(result, 0xCF0ULL);
 }
 
 TEST_F(ByteReaderTest, ReadBitsMSB_ACrossByteBoundary) {
     ByteReader reader(data_.data(), data_.size());
-    uint64_t result = 0;
+    uint64_t   result = 0;
 
     // Read 12 bits MSB-first: high 8 bits of byte0 then high 4 of byte1
     EXPECT_EQ(reader.readBitsMSB(12, result), 12u);
-	EXPECT_EQ(result, 0xACFULL);
+    EXPECT_EQ(result, 0xACFULL);
 }
+
+/*
+ *
+ * vrb function
+ *
+*/
+
+
+TEST(ByteReaderBasicTest, vrbSingleChunk) {
+    uint8_t data[] = {0b00000111};
+	ByteReader reader(data, sizeof(data));
+
+	uint64_t result;
+	EXPECT_EQ(reader.readVBR(2, result), 4);
+	EXPECT_EQ(result, 3);
+}
+
+TEST(ByteReaderBasicTest, vrbSingleChunk2) {
+    uint8_t data[] = {0b00010111};
+	ByteReader reader(data, sizeof(data));
+
+	uint64_t result;
+	EXPECT_EQ(reader.readVBR(3, result), 6);
+	EXPECT_EQ(result, 11);
+}
+
+TEST(ByteReaderBasicTest, vrbZero) {
+    uint8_t data[] = {0};
+	ByteReader reader(data, sizeof(data));
+
+	uint64_t result;
+	EXPECT_EQ(reader.readVBR(6, result), 6);
+	EXPECT_EQ(result, 0);
+}
+
+TEST(ByteReaderBasicTest, vrbZeroWith2chunk) {
+    uint8_t data[] = {0b00001000};
+	ByteReader reader(data, sizeof(data));
+
+	uint64_t result;
+	EXPECT_EQ(reader.readVBR(4, result), 8);
+	EXPECT_EQ(result, 0);
+}
+

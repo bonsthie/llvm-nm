@@ -9,7 +9,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-namespace nm {
+namespace llvm {
 
 class MemoryBuffer {
     void  *_data = nullptr;
@@ -64,11 +64,11 @@ class MemoryBuffer {
 
     std::string_view view() const { return {static_cast<char const *>(_data), _size}; }
 
-    const void *raw() const { return _data; }
+    void *raw() const { return _data; }
 
     operator std::string_view() const { return view(); }
 };
 
-} // namespace nm
+} // namespace llvm
 
 #endif // MEMORYBUFFER_H

@@ -1,18 +1,19 @@
 #ifndef BYTEREADER_H
 #define BYTEREADER_H
 
+#include "llvm/MemoryBuffer.h"
 #include <cstddef>
 #include <cstdint>
 #include <unistd.h>
 #include <vector>
 
-namespace nm {
+namespace llvm {
 
 class ByteReader {
     uint8_t *_data;
 
     /// size of the data buffer
-    size_t _size;
+    const size_t _size;
 
     /// current possition in the buffer
     size_t  _index = 0;
@@ -20,6 +21,7 @@ class ByteReader {
 
   public:
     ByteReader(void *data, size_t size) : _data(static_cast<uint8_t *>(data)), _size(size) {}
+    ByteReader(MemoryBuffer &mb) : _data(static_cast<uint8_t *>(mb.raw())), _size(mb.size()) {}
 
     /// read bytes by bytes in the buffer of max 64
     /// return the number of byte read default is LSB
@@ -32,6 +34,8 @@ class ByteReader {
     uint8_t              readByte();
     std::vector<uint8_t> readBytes(size_t n);
 
+    size_t readVBR(size_t n, uint64_t &ret);
+
     /// tell you if n bytes is style in the buffer
     bool isOverflowBits(size_t n) const;
 
@@ -43,6 +47,6 @@ class ByteReader {
     void _advanceOfBits(size_t n);
 };
 
-} // namespace nm
+} // namespace llvm
 
 #endif // BYTEREADER_H
