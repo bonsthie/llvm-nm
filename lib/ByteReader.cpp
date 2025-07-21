@@ -5,7 +5,7 @@
 
 namespace nm {
 
-size_t ByteReader::readBits(size_t n, uint64_t &ret) {
+size_t ByteReader::readBitsLSB(size_t n, uint64_t &ret) {
     assert(n <= 64 && "Cannot read more than 64 bits");
 
     size_t avail = bitsRemaining();
@@ -26,6 +26,36 @@ size_t ByteReader::readBits(size_t n, uint64_t &ret) {
 
     window >>= bitOffset;
     ret = window & ((uint64_t(1) << n) - 1);
+
+    _advanceOfBits(n);
+    return n;
+}
+
+size_t ByteReader::readBitsMSB(size_t n, uint64_t &ret) {
+    assert(n <= 64 && "Cannot read more than 64 bits");
+
+    size_t avail = bitsRemaining();
+    if (n > avail) n = avail;
+
+    size_t byteOffset = _index;
+    size_t bitOffset  = _indexBits;
+
+    uint64_t window = 0;
+    size_t bytesToRead = (n + bitOffset + 7) / 8;
+    size_t toCopy      = std::min(bytesToRead, sizeof(window));
+    std::memcpy(&window, _data + byteOffset, toCopy);
+
+  #if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+    window = __builtin_bswap64(window);
+  #endif
+
+    size_t totalBits = toCopy * 8;
+
+    size_t shiftLeft  = (64 - totalBits) + bitOffset;
+    window <<= shiftLeft;
+
+    size_t shiftRight = 64 - n;
+    ret = window >> shiftRight;
 
     _advanceOfBits(n);
     return n;

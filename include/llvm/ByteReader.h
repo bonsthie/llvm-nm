@@ -22,9 +22,13 @@ class ByteReader {
     ByteReader(void *data, size_t size) : _data(static_cast<uint8_t *>(data)), _size(size) {}
 
     /// read bytes by bytes in the buffer of max 64
-    /// return the number of byte read
-    size_t               readBits(size_t n, uint64_t &ret);
-    size_t               readBits(size_t n, uint8_t &ret);
+    /// return the number of byte read default is LSB
+    size_t readBits(size_t n, uint64_t &ret) { return readBitsLSB(n, ret); }
+    size_t readBits(size_t n, uint8_t &ret);
+
+    size_t readBitsLSB(size_t n, uint64_t &ret);
+    size_t readBitsMSB(size_t n, uint64_t &ret);
+
     uint8_t              readByte();
     std::vector<uint8_t> readBytes(size_t n);
 
